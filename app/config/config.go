@@ -8,12 +8,21 @@ import (
 	"github.com/spf13/viper"
 )
 
+var (
+	GCP_SERVICE_ACCOUNT_KEY string = ""
+	GCP_PROJECT_ID          string = ""
+	GCS_BUCKET_NAME         string = ""
+)
+
 type AppConfig struct {
-	DB_USERNAME string
-	DB_PASSWORD string
-	DB_HOSTNAME string
-	DB_PORT     int
-	DB_NAME     string
+	DB_USERNAME             string
+	DB_PASSWORD             string
+	DB_HOSTNAME             string
+	DB_PORT                 int
+	DB_NAME                 string
+	GCP_SERVICE_ACCOUNT_KEY string
+	GCP_PROJECT_ID          string
+	GCS_BUCKET_NAME         string
 }
 
 func InitConfig() *AppConfig {
@@ -45,6 +54,18 @@ func ReadEnv() *AppConfig {
 		app.DB_NAME = val
 		isRead = false
 	}
+	if val, found := os.LookupEnv("GCP_SERVICE_ACCOUNT_KEY"); found {
+		app.GCP_SERVICE_ACCOUNT_KEY = val
+		isRead = false
+	}
+	if val, found := os.LookupEnv("GCP_PROJECT_ID"); found {
+		app.GCP_PROJECT_ID = val
+		isRead = false
+	}
+	if val, found := os.LookupEnv("GCS_BUCKET_NAME"); found {
+		app.GCS_BUCKET_NAME = val
+		isRead = false
+	}
 
 	if isRead {
 		viper.AddConfigPath(".")
@@ -61,8 +82,15 @@ func ReadEnv() *AppConfig {
 		app.DB_HOSTNAME = viper.Get("DB_HOSTNAME").(string)
 		app.DB_PORT, _ = strconv.Atoi(viper.Get("DB_PORT").(string))
 		app.DB_NAME = viper.Get("DB_NAME").(string)
+		app.GCP_SERVICE_ACCOUNT_KEY = viper.Get("GCP_SERVICE_ACCOUNT_KEY").(string)
+		app.GCP_PROJECT_ID = viper.Get("GCP_PROJECT_ID").(string)
+		app.GCS_BUCKET_NAME = viper.Get("GCS_BUCKET_NAME").(string)
 
 	}
+
+	GCP_SERVICE_ACCOUNT_KEY = app.GCP_SERVICE_ACCOUNT_KEY
+	GCP_PROJECT_ID = app.GCP_PROJECT_ID
+	GCS_BUCKET_NAME = app.GCS_BUCKET_NAME
 
 	return &app
 }
