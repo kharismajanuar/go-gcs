@@ -40,7 +40,7 @@ func GetStorageClinet() *ClientUploader {
 }
 
 // UploadFile uploads an object
-func (c *ClientUploader) UploadFile(file multipart.File, object string) error {
+func (c *ClientUploader) UploadFile(file multipart.File, object string) (string, error) {
 	ctx := context.Background()
 
 	ctx, cancel := context.WithTimeout(ctx, time.Second*50)
@@ -49,11 +49,13 @@ func (c *ClientUploader) UploadFile(file multipart.File, object string) error {
 	// Upload an object with storage.Writer.
 	wc := c.cl.Bucket(c.bucketName).Object(c.uploadPath + object).NewWriter(ctx)
 	if _, err := io.Copy(wc, file); err != nil {
-		return fmt.Errorf("io.Copy: %v", err)
+		return "", fmt.Errorf("io.Copy: %v", err)
 	}
 	if err := wc.Close(); err != nil {
-		return fmt.Errorf("Writer.Close: %v", err)
+		return "", fmt.Errorf("Writer.Close: %v", err)
 	}
 
-	return nil
+	url := fmt.Sprintf("https://storage.googleapis.com/%v/%v%v", uploader.bucketName, uploader.uploadPath, object)
+
+	return url, nil
 }
