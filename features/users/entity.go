@@ -1,6 +1,7 @@
 package users
 
 import (
+	"mime/multipart"
 	"time"
 
 	"github.com/labstack/echo/v4"
@@ -9,7 +10,9 @@ import (
 type Core struct {
 	ID           uint
 	Name         string `validate:"required,max=50"`
-	DisplayImage string `validate:"required,max=50"`
+	DisplayImage string
+	ImageFile    multipart.File `json:"image" form:"image"`
+	ImageName    string
 	CreatedAt    time.Time
 	UpdatedAt    time.Time
 	Image        ImageCore
@@ -18,11 +21,11 @@ type Core struct {
 type ImageCore struct {
 	ID     uint
 	UserID uint
-	Url    string `validate:"required,max=50"`
+	Url    string
 }
 
 type UserDelivery interface {
-	Add() echo.HandlerFunc
+	Add(c echo.Context) error
 }
 
 type UserService interface {
