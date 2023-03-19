@@ -55,7 +55,7 @@ func (c *ClientUploader) UploadFile(file multipart.File, object string) (string,
 		return "", fmt.Errorf("Writer.Close: %v", err)
 	}
 
-	url := fmt.Sprintf("https://storage.googleapis.com/%v/%v%v", uploader.bucketName, uploader.uploadPath, object)
+	url := fmt.Sprintf("https://storage.googleapis.com/%v/%v", uploader.bucketName, wc.Name)
 
 	return url, nil
 }
