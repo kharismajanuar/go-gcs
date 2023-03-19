@@ -5,6 +5,9 @@ import (
 	"go-gcs/app/config"
 	"log"
 
+	_modelImage "go-gcs/features/images/data"
+	_modelUser "go-gcs/features/users/data"
+
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
@@ -23,4 +26,6 @@ func InitDB(cfg config.AppConfig) *gorm.DB {
 }
 
 func InitialMigration(db *gorm.DB) {
+	db.AutoMigrate(_modelUser.User{})
+	db.AutoMigrate(_modelImage.Image{})
 }
