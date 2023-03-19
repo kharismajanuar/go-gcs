@@ -8,6 +8,7 @@ import (
 
 type User struct {
 	gorm.Model
-	Name   string `gorm:"not null"`
-	Images []_modelImage.Image
+	Name         string `gorm:"not null"`
+	DisplayImage string `gorm:"not null"`
+	Images       []_modelImage.Image
 }
