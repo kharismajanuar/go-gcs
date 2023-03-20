@@ -8,6 +8,7 @@ import (
 	"log"
 	"mime/multipart"
 	"os"
+	"strings"
 	"time"
 
 	"cloud.google.com/go/storage"
@@ -55,7 +56,28 @@ func (c *ClientUploader) UploadFile(file multipart.File, object string) (string,
 		return "", fmt.Errorf("Writer.Close: %v", err)
 	}
 
-	url := fmt.Sprintf("https://storage.googleapis.com/%v/%v", uploader.bucketName, wc.Name)
+	url := fmt.Sprintf("https://storage.googleapis.com/%v/%v", c.bucketName, wc.Name)
 
 	return url, nil
+}
+
+func (c *ClientUploader) DeleteFile(object string) error {
+	ctx := context.Background()
+
+	ctx, cancel := context.WithTimeout(ctx, time.Second*50)
+	defer cancel()
+
+	oldString := fmt.Sprintf("https://storage.googleapis.com/%v/", c.bucketName)
+
+	object = strings.ReplaceAll(object, oldString, "")
+
+	// Delete an object
+	errDelete := c.cl.Bucket(c.bucketName).Object(object).Delete(ctx)
+	if errDelete != nil {
+		return fmt.Errorf("Object(%q).Delete: %v", object, errDelete)
+	}
+
+	fmt.Printf("Blob %v deleted.\n", object)
+
+	return nil
 }

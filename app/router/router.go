@@ -14,4 +14,5 @@ func InitRouter(db *gorm.DB, e *echo.Echo) {
 	userService := _userService.New(userData)
 	userHandler := _userHandler.New(userService)
 	e.POST("/users", userHandler.Add)
+	e.DELETE("/users/:id", userHandler.DeleteAvatar)
 }

@@ -3,12 +3,38 @@ package delivery
 import (
 	"go-gcs/features/users"
 	"net/http"
+	"strconv"
 
 	"github.com/labstack/echo/v4"
 )
 
 type userHandler struct {
 	userService users.UserService
+}
+
+// DeleteAvatar implements users.UserDelivery
+func (delivery *userHandler) DeleteAvatar(c echo.Context) error {
+	id := c.Param("id")
+	idConv, errConv := strconv.Atoi(id)
+	if errConv != nil {
+		return c.JSON(http.StatusBadRequest, "id param must number")
+	}
+
+	userInput := UserRequest{}
+
+	errBind := c.Bind(&userInput)
+	if errBind != nil {
+		return c.JSON(http.StatusBadRequest, "error bind data")
+	}
+
+	dataCore := requestToCore(userInput)
+	dataCore.ID = uint(idConv)
+
+	err := delivery.userService.DeleteAvatar(dataCore)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, "failed delete user's avatar")
+	}
+	return c.JSON(http.StatusOK, "success delete user's avatar")
 }
 
 // Add implements users.UserDelivery

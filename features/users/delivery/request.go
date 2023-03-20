@@ -6,17 +6,17 @@ import (
 )
 
 type UserRequest struct {
-	Name         string `json:"name" form:"name"`
-	DisplayImage string
-	ImageFile    multipart.File `json:"image" form:"image"`
-	ImageName    string
+	Name      string `json:"name" form:"name"`
+	Avatar    string
+	ImageFile multipart.File `json:"image" form:"image"`
+	ImageName string
 }
 
 func requestToCore(dataRequest UserRequest) users.Core {
 	return users.Core{
-		Name:         dataRequest.Name,
-		DisplayImage: dataRequest.DisplayImage,
-		ImageFile:    dataRequest.ImageFile,
-		ImageName:    dataRequest.ImageName,
+		Name:      dataRequest.Name,
+		Avatar:    dataRequest.Avatar,
+		ImageFile: dataRequest.ImageFile,
+		ImageName: dataRequest.ImageName,
 	}
 }
