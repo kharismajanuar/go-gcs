@@ -17,7 +17,7 @@ type imageService struct {
 
 // Create implements images.ImageService
 func (service *imageService) Create(input images.Core) error {
-	errValidate := service.validate.Struct(input)
+	errValidate := service.validate.StructExcept(input, "Url")
 	if errValidate != nil {
 		return errValidate
 	}
