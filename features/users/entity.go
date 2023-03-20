@@ -11,8 +11,8 @@ type Core struct {
 	ID        uint
 	Name      string `validate:"required,max=50"`
 	Avatar    string
-	ImageFile multipart.File `json:"image" form:"image"`
-	ImageName string
+	ImageFile multipart.File `validate:"required"`
+	ImageName string         `validate:"required"`
 	CreatedAt time.Time
 	UpdatedAt time.Time
 	Image     ImageCore

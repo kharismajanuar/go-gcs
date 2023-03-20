@@ -56,9 +56,9 @@ func (delivery *userHandler) Add(c echo.Context) error {
 	}
 
 	userInput.ImageFile = blobFile
-	userInput.ImageName = file.Filename
 
 	dataCore := requestToCore(userInput)
+	dataCore.ImageName = file.Filename
 
 	err := delivery.userService.Create(dataCore)
 	if err != nil {
