@@ -46,8 +46,28 @@ func (delivery *imageHandler) Add(c echo.Context) error {
 }
 
 // Delete implements images.ImageDelivery
-func (*imageHandler) Delete(c echo.Context) error {
-	panic("unimplemented")
+func (delivery *imageHandler) Delete(c echo.Context) error {
+	idUser := c.Param("id_user")
+	idUserConv, errConv := strconv.Atoi(idUser)
+	if errConv != nil {
+		return c.JSON(http.StatusBadRequest, "id user param must number")
+	}
+
+	idImage := c.Param("id_image")
+	idImageConv, errConv := strconv.Atoi(idImage)
+	if errConv != nil {
+		return c.JSON(http.StatusBadRequest, "id image param must number")
+	}
+
+	dataCore := images.Core{}
+	dataCore.UserID = uint(idUserConv)
+	dataCore.ID = uint(idImageConv)
+
+	err := delivery.imageService.Delete(dataCore)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, "failed delete image")
+	}
+	return c.JSON(http.StatusOK, "success delete image")
 }
 
 func New(service images.ImageService) images.ImageDelivery {

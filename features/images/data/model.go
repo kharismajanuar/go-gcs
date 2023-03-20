@@ -18,3 +18,13 @@ func CoreToModel(dataCore images.Core) Image {
 		Url:    dataCore.Url,
 	}
 }
+
+func ModelToCore(dataModel Image) images.Core {
+	return images.Core{
+		ID:        dataModel.ID,
+		UserID:    dataModel.UserID,
+		Url:       dataModel.Url,
+		CreatedAt: dataModel.CreatedAt,
+		UpdatedAt: dataModel.UpdatedAt,
+	}
+}

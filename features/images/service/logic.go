@@ -1,6 +1,7 @@
 package service
 
 import (
+	"errors"
 	"go-gcs/app/storage"
 	"go-gcs/features/images"
 	"strconv"
@@ -39,8 +40,28 @@ func (service *imageService) Create(input images.Core) error {
 }
 
 // Delete implements images.ImageService
-func (*imageService) Delete(data images.Core) error {
-	panic("unimplemented")
+func (service *imageService) Delete(data images.Core) error {
+	dataCore, errSelect := service.imageData.SelectById(data.ID)
+	if errSelect != nil {
+		return errSelect
+	}
+
+	if data.UserID != dataCore.UserID {
+		return errors.New("only owner can delete image")
+	}
+
+	errDeleteCloud := storage.GetStorageClinet().DeleteFile(dataCore.Url)
+	if errDeleteCloud != nil {
+		return errDeleteCloud
+	}
+
+	errDeleteData := service.imageData.Delete(data.ID)
+	if errDeleteData != nil {
+		return errDeleteData
+	}
+
+	return nil
+
 }
 
 func New(repo images.ImageData) images.ImageService {

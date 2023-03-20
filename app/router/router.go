@@ -25,4 +25,5 @@ func InitRouter(db *gorm.DB, e *echo.Echo) {
 	imageService := _imageService.New(imageData)
 	imageHandler := _imageHandler.New(imageService)
 	e.POST("/users/:id/images", imageHandler.Add)
+	e.DELETE("/users/:id_user/images/:id_image", imageHandler.Delete)
 }

@@ -9,8 +9,8 @@ import (
 
 type Core struct {
 	ID        uint
-	UserID    uint `validate:"required"`
-	Url       string
+	UserID    uint           `validate:"required"`
+	Url       string         `validate:"required"`
 	ImageFile multipart.File `validate:"required"`
 	ImageName string         `validate:"required"`
 	CreatedAt time.Time
@@ -29,5 +29,6 @@ type ImageService interface {
 
 type ImageData interface {
 	Insert(input Core) error
-	Delete(data Core) error
+	Delete(id uint) error
+	SelectById(id uint) (Core, error)
 }
