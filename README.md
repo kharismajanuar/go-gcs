@@ -1,4 +1,4 @@
-# go-gcs
+# Go GCS
 
 ## 💻 About The Project
 
@@ -39,5 +39,5 @@ cd go-gcs
 </h3>
 
 <p align="right" style="padding: 5px; border-radius: 100%; background-color: red; font-size: 2rem;">
-  <b><a href="#go-gcs">BACK TO TOP</a></b>
+  <b><a href="#Go-GCS">BACK TO TOP</a></b>
 </p>
